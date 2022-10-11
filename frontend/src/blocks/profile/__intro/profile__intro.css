@@ -1,0 +1,11 @@
+.profile__intro {
+  display: grid;
+  margin-bottom: 36px;
+  max-width: 336px;
+}
+
+@media screen and (min-width: 914px) {
+  .profile__intro {
+    margin: 0;
+  }
+}

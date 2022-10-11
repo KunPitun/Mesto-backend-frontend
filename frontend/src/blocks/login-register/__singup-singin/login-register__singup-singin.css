@@ -1,0 +1,9 @@
+.login-register__singup-singin {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}

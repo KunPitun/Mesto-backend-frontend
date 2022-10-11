@@ -1,0 +1,10 @@
+.header__link_type_logged-in {
+  color: #A9A9A9;
+  display: none;
+}
+
+@media screen and (min-width: 619px) {
+  .header__link_type_logged-in {
+    display: block;
+  }
+}

@@ -1,0 +1,9 @@
+.popup__close-btn_type_delete {
+  top: calc((100vh / 2) - 76.5px - 36px);
+}
+
+@media screen and (min-width: 619px) {
+  .popup__close-btn_type_delete {
+    top: calc((100vh / 2) - 94px - 40px);
+  }
+}

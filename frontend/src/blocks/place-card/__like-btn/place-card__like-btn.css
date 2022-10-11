@@ -1,0 +1,15 @@
+.place-card__like-btn {
+  padding: 0;
+  width: 22px;
+  height: 19px;
+  border: none;
+  background-image: url(../../../images/Like_Button.svg);
+  background-color: transparent;
+  transition: 0.5s;
+  margin: 22px 0 0 0;
+}
+
+.place-card__like-btn:hover {
+  opacity: 0.5;
+  cursor: pointer;
+}

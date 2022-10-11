@@ -1,0 +1,5 @@
+.popup__container_type_place {
+  display: grid;
+  min-width: 240px;
+  width: max-content;
+}

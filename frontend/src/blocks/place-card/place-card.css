@@ -1,0 +1,16 @@
+.place-card {
+  width: 282px;
+  height: 361px;
+  background-color: white;
+  border-radius: 10px;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 282px 1fr;
+}
+
+@media screen and (min-width: 619px) {
+  .place-card:nth-of-type(2n) {
+    justify-self: start;
+  }
+}
+

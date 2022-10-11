@@ -1,0 +1,11 @@
+.places {
+  width: calc(100% - 38px);
+  margin: 0 auto  48px auto;
+}
+
+ @media screen and (min-width: 914px){
+  .places {
+    width: 880px;
+    margin: 0 auto  66px auto;
+  }
+}

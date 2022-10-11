@@ -1,0 +1,18 @@
+.header__email {
+  grid-row: 2/3;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 22px;
+  color: white;
+  margin: 0 24px 46px 0;
+  padding-top: 1px;
+  text-align: end;
+  display: none;
+}
+
+@media screen and (min-width: 619px) {
+  .header__email {
+    display: block;
+  }
+} 

@@ -1,0 +1,14 @@
+.popup__error {
+  color: #FF0000;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 15px;
+  width: 358px;
+  position: fixed;
+  margin: 32px 0 0 36px;
+  display: none;
+}
+
+.popup__error:nth-of-type(2n) {
+  margin: 91px 0 0 36px;
+}
