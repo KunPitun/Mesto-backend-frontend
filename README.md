@@ -10,4 +10,4 @@
 
 ## Репозиторий проекта
 
-[Ссылка на репозиторий проекта.](https://github.com/KunPitun/express-mesto-gha)
+[Ссылка на репозиторий проекта.](https://github.com/KunPitun/react-mesto-api-full)
