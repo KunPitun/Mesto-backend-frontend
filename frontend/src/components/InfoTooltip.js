@@ -7,8 +7,9 @@ function InfoTooltip(props) {
       <div className="popup__container popup__container_type_register">
         <div className={popupIconClassName}></div>
         {props.isRegistered ? (<h2 className="popup__title popup__title_type_register">
-          Вы успешно<br />зарегистрировались!</h2>) : (<h2 className="popup__title popup__title_type_register">
-            Что-то пошло не так!<br />Попробуйте ещё раз.</h2>)}
+          Вы успешно<br />зарегистрировались!</h2>) : (props.isEmailMatchesPassword ? (<h2 className="popup__title popup__title_type_register">
+            Email не должен совпадать с паролем!<br />Попробуйте ещё раз.</h2>) : (<h2 className="popup__title popup__title_type_register">
+            Что-то пошло не так!<br />Попробуйте ещё раз.</h2>))}
       </div>
       <button onClick={props.onClose} className="popup__close-btn popup__close-btn_type_register"
         type="button"></button>

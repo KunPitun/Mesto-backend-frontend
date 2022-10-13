@@ -11,6 +11,10 @@ function Register(props) {
     if (email !== password) {
       props.onRegister(email, password);
     }
+    else {
+      props.isEmailMatchesPassword(true);
+      props.isInfoTooltipOpen(true);
+    }
   }
 
   function handleChangeEmail(e) {

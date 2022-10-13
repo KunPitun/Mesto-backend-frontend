@@ -32,11 +32,9 @@ function App() {
   const [isSubmitBtnActive, setIsSubmitBtnActive] = React.useState(true);
   const [isInfoTooltipOpen, setIsInfoTooltipOpen] = React.useState(false);
   const [isRegistered, setIsRegistered] = React.useState(false);
-
-  const jwt = localStorage.getItem('jwt');
+  const [isEmailMatchesPassword, setIsEmailMatchesPassword] = React.useState(false);
 
   React.useEffect(() => {
-    if (jwt) {
       api.getInitialCards()
         .then((initialCards) => {
           setCards(initialCards.data.reverse());
@@ -52,10 +50,10 @@ function App() {
           console.log(err);
         });
       handleTokenCheck();
-    }
   }, []);
 
   function handleTokenCheck() {
+    const jwt = localStorage.getItem('jwt');
     if (jwt) {
       auth.checkToken(jwt)
         .then((res) => {
@@ -127,6 +125,7 @@ function App() {
     setIsDeletePopupOpen(false);
     setIsInfoTooltipOpen(false);
     setSelectedCard({ name: '', link: '', _id: '' });
+    setIsEmailMatchesPassword(false);
   }
 
   function handleUpdateUser(name, description) {
@@ -178,8 +177,8 @@ function App() {
     auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('currentUserEmail', email);
           setLoggedIn(true);
+          localStorage.setItem('currentUserEmail', email);
           history.push("/");
         }
       })
@@ -187,10 +186,10 @@ function App() {
   }
 
   function handleLogOut() {
+    setLoggedIn(false);
     history.push("/sign-in");
     localStorage.removeItem('jwt');
     localStorage.removeItem('currentUserEmail');
-    setLoggedIn(false);
   }
 
   function handleRegister(email, password) {
@@ -213,7 +212,8 @@ function App() {
         <Header email={localStorage.getItem('currentUserEmail')} onLogOut={handleLogOut} isLoggedIn={loggedIn} />
         <Switch>
           <Route path='/sign-up'>
-            <Register onRegister={handleRegister} />
+            <Register onRegister={handleRegister} isEmailMatchesPassword={setIsEmailMatchesPassword}
+            isInfoTooltipOpen={setIsInfoTooltipOpen} />
           </Route>
           <Route path='/sign-in'>
             <Login onLogin={handleLogin} />
@@ -233,7 +233,8 @@ function App() {
         <DeletePlacePopup isBtnActive={isSubmitBtnActive} onDelete={handleCardDelete}
           onClose={closeAllPopups} isOpen={isDeletePopupOpen} />
         <ImagePopup onClose={closeAllPopups} isOpen={isCardPopupOpen} card={selectedCard} />
-        <InfoTooltip isOpen={isInfoTooltipOpen} isRegistered={isRegistered} onClose={closeAllPopups} />
+        <InfoTooltip isOpen={isInfoTooltipOpen} isRegistered={isRegistered} onClose={closeAllPopups}
+        isEmailMatchesPassword={isEmailMatchesPassword} />
       </div>
     </CurrentUserContext.Provider>
   );
