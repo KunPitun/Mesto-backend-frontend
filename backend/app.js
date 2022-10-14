@@ -6,10 +6,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const cors = require('cors');
-const { createUser, login } = require('./controllers/users');
-const auth = require('./middlewares/auth');
 const errorsHandler = require('./middlewares/errors');
-const NotFoundError = require('./errors/not-found-error');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const routes = require('./routes');
 
@@ -43,7 +40,7 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use('/users', routes);
+app.use(routes);
 
 app.use(errorLogger);
 

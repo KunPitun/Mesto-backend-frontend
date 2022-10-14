@@ -4,6 +4,7 @@ const cardsRouter = require('./cards');
 const { loginValidator, createUserValidator } = require('../validators/celebrate-validators');
 const { createUser, login } = require('../controllers/users');
 const auth = require('../middlewares/auth');
+const NotFoundError = require('../errors/not-found-error');
 
 router.post('/signin', loginValidator, login);
 router.post('/signup', createUserValidator, createUser);
