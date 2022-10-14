@@ -1,3 +1,9 @@
 .popup__close-btn_type_register {
   left: calc((100vw / 2)+ 121px);
 }
+
+@media screen and (min-width: 619px) {
+  .popup__close-btn_type_register {
+    left: calc((100vw / 2) + 215px);
+  }
+}
