@@ -14,7 +14,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import * as auth from '../auth.js';
-import * as newApi from '../utils/Api';
+import * as api from '../utils/Api';
 
 function App() {
   const history = useHistory();
@@ -43,14 +43,14 @@ function App() {
   }, []);
 
   function getMainData() {
-    newApi.getUserData()
+    api.getUserData()
       .then((data) => {
         setCurrentUser(data.data);
       })
       .catch((err) => {
         console.log(err);
       });
-    newApi.getInitialCards()
+    api.getInitialCards()
       .then((initialCards) => {
         setCards(initialCards.data.reverse());
       })
@@ -77,7 +77,7 @@ function App() {
 
   function handleCardDelete() {
     setIsSubmitBtnActive(false);
-    newApi.deleteCard(selectedCard._id)
+    api.deleteCard(selectedCard._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== selectedCard._id));
         closeAllPopups();
@@ -93,7 +93,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(userId => userId === currentUser._id);
 
-    newApi.changeLikeStatus(card._id, !isLiked)
+    api.changeLikeStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard.data : c));
       })
@@ -137,7 +137,7 @@ function App() {
 
   function handleUpdateUser(name, description) {
     setIsSubmitBtnActive(false);
-    newApi.giveUserInfo(name, description)
+    api.giveUserInfo(name, description)
       .then((user) => {
         setCurrentUser(user.data);
         closeAllPopups();
@@ -152,7 +152,7 @@ function App() {
 
   function handleUpdateAvatar(link) {
     setIsSubmitBtnActive(false);
-    newApi.giveAvatarInfo(link.value)
+    api.giveAvatarInfo(link.value)
       .then((avatar) => {
         setCurrentUser(avatar.data);
         closeAllPopups();
@@ -167,7 +167,7 @@ function App() {
 
   function handleAddPlace(place, link) {
     setIsSubmitBtnActive(false);
-    newApi.giveCardInfo(place, link)
+    api.giveCardInfo(place, link)
       .then((newCard) => {
         setCards([newCard.data, ...cards]);
         closeAllPopups();
