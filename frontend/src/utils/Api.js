@@ -1,122 +1,107 @@
-class Api {
-  constructor({ baseUrl, headers }) {
-    this._baseUrl = baseUrl;
-    this._authorization = headers.authorization;
-    this._contentType = headers['Content-Type'];
-  }
+export const BASE_URL = 'https://api.kunpitun.mesto.nomoredomains.icu';
 
-  _checkResponse(res) {
-    if (res.ok) {
-      return res.json();
+export const getUserData = () => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
     }
-    return Promise.reject(`Ошибка ${res.status}`);
-  }
+  })
+    .then(checkResponse);
+}
 
-  getUserData() {
-    return fetch(`${this._baseUrl}/users/me`, {
+export const getInitialCards = () => {
+  return fetch(`${BASE_URL}/cards`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    }
+  })
+    .then(checkResponse);
+}
+
+export const giveUserInfo = (name, info) => {
+  return fetch(`${BASE_URL}/users/me`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: JSON.stringify({
+      name: name,
+      about: info
+    })
+  })
+    .then(checkResponse);
+}
+
+export const giveCardInfo = (place, link) => {
+  return fetch(`${BASE_URL}/cards`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: JSON.stringify({
+      name: place,
+      link: link
+    })
+  })
+    .then(checkResponse);
+}
+
+export const changeLikeStatus = (cardId, isLiked) => {
+  if (isLiked) {
+    return fetch(`${BASE_URL}/cards/${cardId}/likes`, {
+      method: 'PUT',
       headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType,
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('jwt')}`,
       }
     })
-      .then(this._checkResponse)
+      .then(checkResponse);
   }
-
-  getInitialCards() {
-    return fetch(`${this._baseUrl}/cards`, {
-      headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType
-      }
-    })
-      .then(this._checkResponse)
-  }
-
-  giveUserInfo(name, info) {
-    return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
-      headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType
-      },
-      body: JSON.stringify({
-        name: name,
-        about: info
-      })
-    })
-      .then(this._checkResponse)
-  }
-
-  giveCardInfo(place, link) {
-    return fetch(`${this._baseUrl}/cards`, {
-      method: 'POST',
-      headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType
-      },
-      body: JSON.stringify({
-        name: place,
-        link: link
-      })
-    })
-      .then(this._checkResponse)
-  }
-
-  changeLikeStatus(cardId, isLiked) {
-    if (isLiked) {
-      return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-        method: 'PUT',
-        headers: {
-          authorization: this._authorization,
-          'Content-Type': this._contentType
-        }
-      })
-        .then(this._checkResponse)
-    }
-    else {
-      return fetch(`${this._baseUrl}/cards/${cardId}/likes`, {
-        method: 'DELETE',
-        headers: {
-          authorization: this._authorization,
-          'Content-Type': this._contentType
-        }
-      })
-        .then(this._checkResponse)
-    }
-  }
-
-  deleteCard(cardId) {
-    return fetch(`${this._baseUrl}/cards/${cardId}`, {
+  else {
+    return fetch(`${BASE_URL}/cards/${cardId}/likes`, {
       method: 'DELETE',
       headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType
+        'Content-Type': 'application/json',
+        'authorization': `Bearer ${localStorage.getItem('jwt')}`,
       }
     })
-      .then(this._checkResponse)
-  }
-
-  giveAvatarInfo(link) {
-    return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: {
-        authorization: this._authorization,
-        'Content-Type': this._contentType
-      },
-      body: JSON.stringify({
-        avatar: link
-      })
-    })
-      .then(this._checkResponse)
+      .then(checkResponse);
   }
 }
 
-const api = new Api({
-  baseUrl: 'https://api.kunpitun.mesto.nomoredomains.icu',
-  headers: {
-    authorization: `Bearer ${localStorage.getItem('jwt')}`,
-    'Content-Type': 'application/json',
-  }
-});
+export const deleteCard = (cardId) => {
+  return fetch(`${BASE_URL}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    }
+  })
+    .then(checkResponse);
+}
 
-export default api;
+export const giveAvatarInfo = (link) => {
+  return fetch(`${BASE_URL}/users/me/avatar`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+      'authorization': `Bearer ${localStorage.getItem('jwt')}`,
+    },
+    body: JSON.stringify({
+      avatar: link
+    })
+  })
+    .then(checkResponse);
+}
+
+const checkResponse = (res) => {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка ${res.status}`);
+}

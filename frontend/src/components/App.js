@@ -8,13 +8,13 @@ import EditAvatarPopup from './EditAvatarPopup';
 import AddPlacePopup from './AddPlacePopup';
 import DeletePlacePopup from './DeletePlacePopup';
 import InfoTooltip from './InfoTooltip';
-import api from '../utils/Api';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { Route, Switch, withRouter, useHistory } from 'react-router-dom';
 import ProtectedRoute from './ProtectedRoute';
 import Login from './Login';
 import Register from './Register';
 import * as auth from '../auth.js';
+import * as newApi from '../utils/Api';
 
 function App() {
   const history = useHistory();
@@ -35,22 +35,29 @@ function App() {
   const [isEmailMatchesPassword, setIsEmailMatchesPassword] = React.useState(false);
 
   React.useEffect(() => {
-      api.getInitialCards()
-        .then((initialCards) => {
-          setCards(initialCards.data.reverse());
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      api.getUserData()
-        .then((data) => {
-          setCurrentUser(data.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      handleTokenCheck();
+    const jwt = localStorage.getItem('jwt');
+    if (jwt) {
+      getMainData();
+    }
+    handleTokenCheck();
   }, []);
+
+  function getMainData() {
+    newApi.getUserData()
+      .then((data) => {
+        setCurrentUser(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    newApi.getInitialCards()
+      .then((initialCards) => {
+        setCards(initialCards.data.reverse());
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
 
   function handleTokenCheck() {
     const jwt = localStorage.getItem('jwt');
@@ -70,7 +77,7 @@ function App() {
 
   function handleCardDelete() {
     setIsSubmitBtnActive(false);
-    api.deleteCard(selectedCard._id)
+    newApi.deleteCard(selectedCard._id)
       .then(() => {
         setCards((state) => state.filter((c) => c._id !== selectedCard._id));
         closeAllPopups();
@@ -86,7 +93,7 @@ function App() {
   function handleCardLike(card) {
     const isLiked = card.likes.some(userId => userId === currentUser._id);
 
-    api.changeLikeStatus(card._id, !isLiked)
+    newApi.changeLikeStatus(card._id, !isLiked)
       .then((newCard) => {
         setCards((state) => state.map((c) => c._id === card._id ? newCard.data : c));
       })
@@ -130,7 +137,7 @@ function App() {
 
   function handleUpdateUser(name, description) {
     setIsSubmitBtnActive(false);
-    api.giveUserInfo(name, description)
+    newApi.giveUserInfo(name, description)
       .then((user) => {
         setCurrentUser(user.data);
         closeAllPopups();
@@ -145,7 +152,7 @@ function App() {
 
   function handleUpdateAvatar(link) {
     setIsSubmitBtnActive(false);
-    api.giveAvatarInfo(link.value)
+    newApi.giveAvatarInfo(link.value)
       .then((avatar) => {
         setCurrentUser(avatar.data);
         closeAllPopups();
@@ -160,7 +167,7 @@ function App() {
 
   function handleAddPlace(place, link) {
     setIsSubmitBtnActive(false);
-    api.giveCardInfo(place, link)
+    newApi.giveCardInfo(place, link)
       .then((newCard) => {
         setCards([newCard.data, ...cards]);
         closeAllPopups();
@@ -177,6 +184,7 @@ function App() {
     auth.authorize(email, password)
       .then((data) => {
         if (data.token) {
+          getMainData();
           setLoggedIn(true);
           localStorage.setItem('currentUserEmail', email);
           history.push("/");
@@ -213,7 +221,7 @@ function App() {
         <Switch>
           <Route path='/sign-up'>
             <Register onRegister={handleRegister} isEmailMatchesPassword={setIsEmailMatchesPassword}
-            isInfoTooltipOpen={setIsInfoTooltipOpen} />
+              isInfoTooltipOpen={setIsInfoTooltipOpen} />
           </Route>
           <Route path='/sign-in'>
             <Login onLogin={handleLogin} />
@@ -234,7 +242,7 @@ function App() {
           onClose={closeAllPopups} isOpen={isDeletePopupOpen} />
         <ImagePopup onClose={closeAllPopups} isOpen={isCardPopupOpen} card={selectedCard} />
         <InfoTooltip isOpen={isInfoTooltipOpen} isRegistered={isRegistered} onClose={closeAllPopups}
-        isEmailMatchesPassword={isEmailMatchesPassword} />
+          isEmailMatchesPassword={isEmailMatchesPassword} />
       </div>
     </CurrentUserContext.Provider>
   );
