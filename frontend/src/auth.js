@@ -1,4 +1,4 @@
-export const BASE_URL = 'https://api.kunpitun.mesto.nomoredomains.icu';
+import { BASE_URL } from "./utils/Api";
 
 export const register = (email, password) => {
   return fetch(`${BASE_URL}/signup`, {
